@@ -2387,13 +2387,13 @@ export default function CrmPage() {
                 <table className="w-full text-left text-xs">
                   <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
                     <tr>
-                      <th className="px-4 py-3" style={{ width: '40px' }}>Sl no</th>
+                      <th className="px-4 py-3 text-center" style={{ width: '45px' }}>Sl no</th>
                       <th className="px-4 py-3" style={{ width: '110px' }}>Code</th>
-                      <th className="px-4 py-3">Product Name</th>
+                      <th className="px-4 py-3" style={{ maxWidth: '320px' }}>Product Name</th>
                       <th className="px-4 py-3" style={{ width: '180px' }}>Product Head</th>
-                      <th className="px-4 py-3 text-right" style={{ width: '100px' }}>Price</th>
-                      <th className="px-4 py-3 text-center" style={{ width: '120px' }}>Stock</th>
-                      <th className="px-4 py-3 text-right" style={{ width: '80px' }}>Actions</th>
+                      <th className="px-4 py-3 text-right whitespace-nowrap" style={{ width: '100px' }}>Price</th>
+                      <th className="px-4 py-3 text-center whitespace-nowrap" style={{ width: '140px' }}>Stock</th>
+                      <th className="px-4 py-3 text-right whitespace-nowrap" style={{ width: '85px' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -2405,16 +2405,16 @@ export default function CrmPage() {
                       )
                       .map((prod, index) => (
                         <tr key={prod.id} className="hover:bg-slate-50 transition-colors">
-                          <td className="px-4 py-3 font-mono text-slate-500">{index + 1}</td>
-                          <td className="px-4 py-3 font-mono font-bold text-slate-700">{prod.code}</td>
-                          <td className="px-4 py-3 font-semibold text-slate-800">{prod.name}</td>
+                          <td className="px-4 py-3 text-center font-mono text-slate-500">{index + 1}</td>
+                          <td className="px-4 py-3 font-mono font-bold text-slate-700 whitespace-nowrap">{prod.code}</td>
+                          <td className="px-4 py-3 font-semibold text-slate-800 max-w-[320px]">{prod.name}</td>
                           <td className="px-4 py-3 text-slate-600">{prod.category}</td>
-                          <td className="px-4 py-3 text-right font-mono font-bold text-slate-800">
+                          <td className="px-4 py-3 text-right font-mono font-bold text-slate-800 whitespace-nowrap">
                             ${(prod.sellingPrice || 0).toLocaleString()}
                           </td>
-                          <td className="px-4 py-3 text-center font-mono">
+                          <td className="px-4 py-3 text-center font-mono whitespace-nowrap">
                             <span
-                              className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                              className={`inline-block whitespace-nowrap px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
                                 (prod.stockQty || 0) > 10
                                   ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                   : (prod.stockQty || 0) > 0
@@ -2425,7 +2425,7 @@ export default function CrmPage() {
                               {prod.stockQty || 0} {prod.unit || 'MT'}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-right space-x-2">
+                          <td className="px-4 py-3 text-right space-x-2 whitespace-nowrap">
                             <button onClick={() => openEditProductModal(prod)} className="text-slate-500 hover:text-amber-600 p-1" title="Edit">
                               <Edit className="w-3.5 h-3.5 inline" />
                             </button>
