@@ -96,6 +96,9 @@ export default function CrmPage() {
   const [pCode, setPCode] = useState('');
   const [pName, setPName] = useState('');
   const [pHead, setPHead] = useState('Reinforcing Steel & Rebar');
+  const [pSellingPrice, setPSellingPrice] = useState<number>(0);
+  const [pStockQty, setPStockQty] = useState<number>(0);
+  const [pUnit, setPUnit] = useState('MT');
 
   // 3. Add Customer State (No Contact Person, No Sales Executive, No Credit Fields)
   const [cName, setCName] = useState('');
@@ -381,6 +384,9 @@ export default function CrmPage() {
     setPCode(`PROD-${String(products.length + 1).padStart(3, '0')}`);
     setPName('');
     setPHead(productHeads[0]?.name || 'Reinforcing Steel & Rebar');
+    setPSellingPrice(0);
+    setPStockQty(0);
+    setPUnit('MT');
     setModalType('AddProduct');
     setModalOpen(true);
   };
@@ -390,6 +396,9 @@ export default function CrmPage() {
     setPCode(prod.code);
     setPName(prod.name);
     setPHead(prod.category);
+    setPSellingPrice(prod.sellingPrice || 0);
+    setPStockQty(prod.stockQty || 0);
+    setPUnit(prod.unit || 'MT');
     setModalType('AddProduct');
     setModalOpen(true);
   };
@@ -397,10 +406,27 @@ export default function CrmPage() {
   const handleAddProduct = (e: React.FormEvent) => {
     e.preventDefault();
     if (!pName) return;
+    const priceVal = Number(pSellingPrice) || 0;
+    const stockVal = Number(pStockQty) || 0;
+    const statusVal: 'In Stock' | 'Low Stock' | 'Out of Stock' =
+      stockVal > 10 ? 'In Stock' : stockVal > 0 ? 'Low Stock' : 'Out of Stock';
+
     if (editingProductId) {
       setProducts(
         products.map((p) =>
-          p.id === editingProductId ? { ...p, code: pCode, name: pName, category: pHead } : p
+          p.id === editingProductId
+            ? {
+                ...p,
+                code: pCode,
+                name: pName,
+                category: pHead,
+                unit: pUnit || p.unit || 'MT',
+                sellingPrice: priceVal,
+                costPrice: p.costPrice || Math.round(priceVal * 0.75),
+                stockQty: stockVal,
+                status: statusVal
+              }
+            : p
         )
       );
       setEditingProductId(null);
@@ -411,18 +437,20 @@ export default function CrmPage() {
         code: pCode || `PROD-${String(products.length + 1).padStart(3, '0')}`,
         name: pName,
         category: pHead,
-        unit: 'MT',
-        costPrice: 650,
-        sellingPrice: 850,
-        stockQty: 50,
+        unit: pUnit || 'MT',
+        costPrice: Math.round(priceVal * 0.75),
+        sellingPrice: priceVal,
+        stockQty: stockVal,
         minAlertQty: 10,
-        status: 'In Stock'
+        status: statusVal
       };
       setProducts([...products, newP]);
       alert('Product added successfully!');
     }
     setPCode('');
     setPName('');
+    setPSellingPrice(0);
+    setPStockQty(0);
     setModalOpen(false);
   };
 
@@ -2360,10 +2388,12 @@ export default function CrmPage() {
                   <thead className="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold border-b border-slate-200">
                     <tr>
                       <th className="px-4 py-3" style={{ width: '40px' }}>Sl no</th>
-                      <th className="px-4 py-3" style={{ width: '120px' }}>Code</th>
+                      <th className="px-4 py-3" style={{ width: '110px' }}>Code</th>
                       <th className="px-4 py-3">Product Name</th>
-                      <th className="px-4 py-3" style={{ width: '220px' }}>Product Head</th>
-                      <th className="px-4 py-3 text-right" style={{ width: '100px' }}>Actions</th>
+                      <th className="px-4 py-3" style={{ width: '180px' }}>Product Head</th>
+                      <th className="px-4 py-3 text-right" style={{ width: '100px' }}>Price</th>
+                      <th className="px-4 py-3 text-center" style={{ width: '120px' }}>Stock</th>
+                      <th className="px-4 py-3 text-right" style={{ width: '80px' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -2379,6 +2409,22 @@ export default function CrmPage() {
                           <td className="px-4 py-3 font-mono font-bold text-slate-700">{prod.code}</td>
                           <td className="px-4 py-3 font-semibold text-slate-800">{prod.name}</td>
                           <td className="px-4 py-3 text-slate-600">{prod.category}</td>
+                          <td className="px-4 py-3 text-right font-mono font-bold text-slate-800">
+                            ${(prod.sellingPrice || 0).toLocaleString()}
+                          </td>
+                          <td className="px-4 py-3 text-center font-mono">
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                                (prod.stockQty || 0) > 10
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : (prod.stockQty || 0) > 0
+                                  ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                  : 'bg-rose-50 text-rose-700 border border-rose-200'
+                              }`}
+                            >
+                              {prod.stockQty || 0} {prod.unit || 'MT'}
+                            </span>
+                          </td>
                           <td className="px-4 py-3 text-right space-x-2">
                             <button onClick={() => openEditProductModal(prod)} className="text-slate-500 hover:text-amber-600 p-1" title="Edit">
                               <Edit className="w-3.5 h-3.5 inline" />
@@ -3131,6 +3177,43 @@ export default function CrmPage() {
               onChange={(e) => setPName(e.target.value)}
               className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg"
             />
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Price ($) *</label>
+              <input
+                type="number"
+                step="any"
+                min="0"
+                required
+                placeholder="0.00"
+                value={pSellingPrice || ''}
+                onChange={(e) => setPSellingPrice(Number(e.target.value))}
+                className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg font-mono"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Stock Qty *</label>
+              <input
+                type="number"
+                min="0"
+                required
+                placeholder="0"
+                value={pStockQty || ''}
+                onChange={(e) => setPStockQty(Number(e.target.value))}
+                className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg font-mono font-semibold"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Unit</label>
+              <input
+                type="text"
+                placeholder="e.g. MT, Sheet, PCS"
+                value={pUnit}
+                onChange={(e) => setPUnit(e.target.value)}
+                className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-lg"
+              />
+            </div>
           </div>
           <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
             <button

@@ -5,15 +5,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
-  PieChart,
   Compass,
   MapPin,
+  PieChart,
   Building2,
   ChevronRight,
-  LogOut,
-  FileSpreadsheet,
-  FileBarChart,
-  ClipboardList
+  LogOut
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
@@ -35,13 +32,6 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       allowed: true
     },
     {
-      name: 'Accounts Module',
-      href: '/accounts',
-      icon: PieChart,
-      badge: 'Finance',
-      allowed: user ? user.permAccount : true
-    },
-    {
       name: 'CRM Module',
       href: '/crm',
       icon: Compass,
@@ -54,30 +44,13 @@ export default function Sidebar({ isOpen }: SidebarProps) {
       icon: MapPin,
       badge: 'Supply',
       allowed: user ? user.permProcurement : true
-    }
-  ];
-
-  const reportItems = [
+    },
     {
-      name: 'Accounts Reports',
-      href: '/accounts?view=reports',
-      icon: FileSpreadsheet,
-      badge: '8 Reports',
+      name: 'Accounts Module',
+      href: '/accounts',
+      icon: PieChart,
+      badge: 'Finance',
       allowed: user ? user.permAccount : true
-    },
-    {
-      name: 'CRM Sales Reports',
-      href: '/crm?view=reports',
-      icon: FileBarChart,
-      badge: '15 Reports',
-      allowed: user ? user.permCRM : true
-    },
-    {
-      name: 'Procurement Reports',
-      href: '/procurement?view=reports',
-      icon: ClipboardList,
-      badge: '8 Reports',
-      allowed: user ? user.permProcurement : true
     }
   ];
 
@@ -172,45 +145,6 @@ export default function Sidebar({ isOpen }: SidebarProps) {
                               : 'bg-slate-800 text-slate-400'
                               }`}
                           >
-                            {item.badge}
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </Link>
-                );
-              })}
-          </nav>
-        </div>
-
-        {/* Enterprise Reports Section */}
-        <div>
-          {isOpen && (
-            <p className="px-3 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
-              <span>Reports</span>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-blue-400 font-semibold">
-                ERP Reports
-              </span>
-            </p>
-          )}
-          <nav className="space-y-1">
-            {reportItems
-              .filter((item) => item.allowed)
-              .map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all hover:bg-slate-800/60 hover:text-white text-slate-400 group"
-                    title={!isOpen ? item.name : undefined}
-                  >
-                    <Icon className="w-4 h-4 shrink-0 text-slate-400 group-hover:text-blue-400 transition-colors" />
-                    {isOpen && (
-                      <div className="flex items-center justify-between flex-1 min-w-0">
-                        <span className="truncate">{item.name}</span>
-                        {item.badge && (
-                          <span className="text-[9px] px-1.5 py-0.5 rounded font-semibold bg-slate-800 text-slate-400 group-hover:bg-blue-900/50 group-hover:text-blue-300">
                             {item.badge}
                           </span>
                         )}
