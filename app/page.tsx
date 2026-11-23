@@ -14,11 +14,13 @@ import {
   initialPendingDeliveries,
   initialCustomers
 } from '@/lib/mock-data';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function AdminOverviewPage() {
   const [quotations] = useState(initialPendingQuotations);
   const [deliveries] = useState(initialPendingDeliveries);
   const [customers] = useState(initialCustomers);
+  const { t } = useLanguage();
 
   return (
     <div className="space-y-5">
@@ -31,8 +33,8 @@ export default function AdminOverviewPage() {
               <TrendingUp className="w-6 h-6 text-white" />
             </div>
             <div>
-              <span className="text-xs uppercase font-bold tracking-wider block">Current Month Orders</span>
-              <span className="text-[11px] text-teal-100 font-medium">Active sales orders</span>
+              <span className="text-xs uppercase font-bold tracking-wider block">{t('current_month_orders')}</span>
+              <span className="text-[11px] text-teal-100 font-medium">{t('active_sales_orders')}</span>
             </div>
           </div>
           <span className="text-3xl font-extrabold font-mono">18</span>
@@ -45,8 +47,8 @@ export default function AdminOverviewPage() {
               <Users className="w-6 h-6 text-white" />
             </div>
             <div>
-              <span className="text-xs uppercase font-bold tracking-wider block">Total Customers</span>
-              <span className="text-[11px] text-indigo-100 font-medium">Registered client accounts</span>
+              <span className="text-xs uppercase font-bold tracking-wider block">{t('total_customers')}</span>
+              <span className="text-[11px] text-indigo-100 font-medium">{t('registered_client_accounts')}</span>
             </div>
           </div>
           <span className="text-3xl font-extrabold font-mono">{customers.length}</span>
@@ -61,7 +63,7 @@ export default function AdminOverviewPage() {
             <div className="flex items-center gap-2">
               <FileText className="w-4 h-4 text-slate-700" />
               <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-                Pending For Action - Quotation
+                {t('pending_quotation_action')}
               </h3>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-800">
@@ -73,9 +75,9 @@ export default function AdminOverviewPage() {
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-100/80 text-slate-600 font-semibold border-b border-slate-200">
                 <tr>
-                  <th className="px-4 py-2.5">Date</th>
-                  <th className="px-4 py-2.5">Customer</th>
-                  <th className="px-4 py-2.5">Enquiry Ref</th>
+                  <th className="px-4 py-2.5">{t('date')}</th>
+                  <th className="px-4 py-2.5">{t('customer')}</th>
+                  <th className="px-4 py-2.5">{t('enquiry_ref')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -99,7 +101,7 @@ export default function AdminOverviewPage() {
               href="/crm"
               className="text-[11px] font-semibold text-blue-700 hover:text-blue-800 inline-flex items-center gap-1"
             >
-              <span>View in CRM</span>
+              <span>{t('view_in_crm')}</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
@@ -111,7 +113,7 @@ export default function AdminOverviewPage() {
             <div className="flex items-center gap-2">
               <Truck className="w-4 h-4 text-slate-700" />
               <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-                Pending For Action - Delivery
+                {t('pending_delivery_action')}
               </h3>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-800">
@@ -123,9 +125,9 @@ export default function AdminOverviewPage() {
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-100/80 text-slate-600 font-semibold border-b border-slate-200">
                 <tr>
-                  <th className="px-4 py-2.5">Sales Order</th>
-                  <th className="px-4 py-2.5">Customer</th>
-                  <th className="px-4 py-2.5">LPO Ref</th>
+                  <th className="px-4 py-2.5">{t('sales_order')}</th>
+                  <th className="px-4 py-2.5">{t('customer')}</th>
+                  <th className="px-4 py-2.5">{t('lpo_ref')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -151,7 +153,7 @@ export default function AdminOverviewPage() {
               href="/crm"
               className="text-[11px] font-semibold text-blue-700 hover:text-blue-800 inline-flex items-center gap-1"
             >
-              <span>View in CRM</span>
+              <span>{t('view_in_crm')}</span>
               <ArrowRight className="w-3 h-3" />
             </Link>
           </div>

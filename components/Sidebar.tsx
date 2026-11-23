@@ -13,6 +13,7 @@ import {
   LogOut
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -22,41 +23,42 @@ interface SidebarProps {
 export default function Sidebar({ isOpen }: SidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
 
   const navigationItems = [
     {
-      name: 'Admin Overview',
+      name: t('admin_overview'),
       href: '/',
       icon: LayoutDashboard,
       badge: null,
       allowed: true
     },
     {
-      name: 'CRM Module',
+      name: t('crm_module'),
       href: '/crm',
       icon: Compass,
-      badge: 'Sales',
+      badge: t('sales'),
       allowed: user ? user.permCRM : true
     },
     {
-      name: 'Procurement Module',
+      name: t('procurement_module'),
       href: '/procurement',
       icon: MapPin,
-      badge: 'Supply',
+      badge: t('supply'),
       allowed: user ? user.permProcurement : true
     },
     {
-      name: 'Accounts Module',
+      name: t('accounts_module'),
       href: '/accounts',
       icon: PieChart,
-      badge: 'Finance',
+      badge: t('finance'),
       allowed: user ? user.permAccount : true
     }
   ];
 
   const adminItems = [
     {
-      name: 'Companies',
+      name: t('companies'),
       href: '/company',
       icon: Building2,
       allowed: true
@@ -115,7 +117,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         <div>
           {isOpen && (
             <p className="px-3 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              Core Modules
+              {t('core_modules')}
             </p>
           )}
           <nav className="space-y-1">
@@ -160,7 +162,7 @@ export default function Sidebar({ isOpen }: SidebarProps) {
         <div>
           {isOpen && (
             <p className="px-3 mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              Administration
+              {t('administration')}
             </p>
           )}
           <nav className="space-y-1">
@@ -194,10 +196,10 @@ export default function Sidebar({ isOpen }: SidebarProps) {
             <button
               onClick={logout}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:bg-rose-500/10 hover:text-rose-400 transition-colors text-left"
-              title={!isOpen ? 'Logout' : undefined}
+              title={!isOpen ? t('sign_out') : undefined}
             >
               <LogOut className="w-4 h-4 shrink-0 text-slate-400 group-hover:text-rose-400" />
-              {isOpen && <span className="truncate">Sign Out</span>}
+              {isOpen && <span className="truncate">{t('sign_out')}</span>}
             </button>
           </nav>
         </div>
